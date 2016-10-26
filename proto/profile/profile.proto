@@ -1,0 +1,32 @@
+syntax = "proto3";
+package proto.profile;
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+message ProfileInstance {
+  float weight         = 1;
+  float height         = 2;
+  enum Sex {
+    MALE   = 0;
+    FEMALE = 1;
+  }
+  Sex sex              = 3;
+  int32 dateOfBirthUtc = 4;
+  string uid           = 5;
+}
+
+// profile service.
+service ProfileService {
+  rpc ProfileInstancePost(stream ProfileInstance) returns (stream ProfileInstance) {
+    option (google.api.http) = {
+      post: "/v1/user/profile"
+      body: "*"
+    };
+  }
+
+  rpc ProfileInstanceGet(google.protobuf.Empty) returns (stream ProfileInstance) {
+    option (google.api.http) = {
+      get: "/v1/user/profile"
+    };
+  }
+}
